@@ -4,32 +4,29 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 from twilio.rest import Client
-from decouple import config
-import keys
+from dotenv import load_dotenv
 import time
 import os
 
-USER = config('USER_ID')
-PASS = config('PASS')
-TARGET_NUM = config('TARGET_NUMBER')
-AUTH = config('AUTH')
+load_dotenv()
 
 
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),options=chrome_options)
 
 driver.get(
     "https://epprd.mcmaster.ca/psp/prepprd/?cmd=login&languageCd=ENG&")
 
 driver.implicitly_wait(10)
 username = driver.find_element_by_id("userid")
-username.send_keys(USER)
+username.send_keys(os.getenv("USER_ID"))
 
 password = driver.find_element_by_id("pwd")
-password.send_keys(PASS)
+password.send_keys(os.getenv("PASS"))
 
 driver.find_element_by_name('Submit').click()
 
@@ -61,12 +58,12 @@ while True:
     message = driver.find_element_by_xpath(
         '//*[@id="win0divDERIVED_REGFRM1_SS_MESSAGE_LONG$0"]/div').text
     if not "full" in message:
-        client = Client(keys.account_sid, AUTH)
+        client = Client(os.getenv("TWILIO_SID"), os.getenv("AUTH"))
 
         message = client.messages.create(
             body="Your course has been selected!",
-            from_=keys.twilio_number,
-            to=TARGET_NUM
+            from_=os.getenv("FROM_NUMBER"),
+            to=os.getenv("TARGET_NUMBER")
         )
         print(message.body)
         driver.quit()
