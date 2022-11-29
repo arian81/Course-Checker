@@ -1,9 +1,12 @@
-FROM browserless/chrome
-FROM python:3.11-slim-buster
+# FROM browserless/chrome
+# FROM python:3.11-slim-buster
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+
 
 WORKDIR /python-docker
 
-# RUN apt-get update && apt-get install -y chromium-browser 
+RUN apt-get update && apt-get install -y gcc make chromium-browser python3 python3-dev python3-distutils python3-pip
 
 COPY . .
 
