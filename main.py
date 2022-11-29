@@ -10,9 +10,9 @@ from dotenv import load_dotenv
 import time
 import os
 
-load_dotenv()
+# load_dotenv()
 
-
+print("STARTING AAA")
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
