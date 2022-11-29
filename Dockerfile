@@ -6,13 +6,15 @@ FROM selenium/standalone-chrome
 
 USER root
 RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3 get-pip.py
-RUN python3 -m pip install selenium
+# RUN python3 get-pip.py
+# RUN python3 -m pip install selenium
 
 WORKDIR /python-docker
 
-RUN apt-get update && apt-get install -y gcc make chromium-browser python3 python3-dev python3-distutils python3-pip
-RUN apt-get update && apt-get install chromium-chromedriver -y
+# RUN apt-get update && apt-get install -y gcc make chromium-browser python3 python3-dev python3-distutils python3-pip
+# RUN apt-get update && apt-get install chromium-chromedriver -y
+
+RUN apt-get update && apt-get install -y gcc make python3 python3-dev python3-distutils python3-pip
 
 COPY . .
 
