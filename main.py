@@ -21,7 +21,10 @@ driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),option
 driver.get(
     "https://epprd.mcmaster.ca/psp/prepprd/?cmd=login&languageCd=ENG&")
 
+print("Starting")
 driver.implicitly_wait(10)
+
+print("ok done waiting")
 username = driver.find_element_by_id("userid")
 username.send_keys(os.getenv("USER_ID"))
 
@@ -47,6 +50,7 @@ driver.find_element_by_id('SSR_DUMMY_RECV1$sels$1$$0').click()
 driver.find_element_by_id('DERIVED_SSS_SCT_SSR_PB_GO').click()
 
 while True:
+    print("Starting loop")
     driver.find_element_by_id('DERIVED_REGFRM1_LINK_ADD_ENRL$82$').click()
 
     try:
