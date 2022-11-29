@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from twilio.rest import Client
 from decouple import config
 import keys
@@ -14,7 +15,11 @@ PASS = config('PASS')
 TARGET_NUM = config('TARGET_NUMBER')
 AUTH = config('AUTH')
 
-driver = webdriver.Chrome(executable_path="Drivers/chromedriver")
+
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+driver = webdriver.Chrome(options=chrome_options)
 
 driver.get(
     "https://epprd.mcmaster.ca/psp/prepprd/?cmd=login&languageCd=ENG&")
@@ -28,7 +33,8 @@ password.send_keys(PASS)
 
 driver.find_element_by_name('Submit').click()
 
-driver.find_element_by_xpath('//*[@id="MCM_IMG_CLASS$10"]').click()
+# driver.find_element_by_xpath('//*[@id="MCM_IMG_CLASS$10"]').click()
+driver.get("https://epprd.mcmaster.ca/psp/prepprd/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL")
 
 # press enroll top left
 frame = driver.find_element_by_xpath('//*[@id="ptifrmtgtframe"]')
@@ -54,7 +60,7 @@ while True:
 
     message = driver.find_element_by_xpath(
         '//*[@id="win0divDERIVED_REGFRM1_SS_MESSAGE_LONG$0"]/div').text
-    if message != "Error: Available seats are reserved and you do not meet the reserve capacity criteria.":
+    if not "full" in message:
         client = Client(keys.account_sid, AUTH)
 
         message = client.messages.create(
