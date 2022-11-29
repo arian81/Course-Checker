@@ -1,8 +1,13 @@
 # FROM browserless/chrome
 # FROM python:3.11-slim-buster
-FROM ubuntu:20.04
-ARG DEBIAN_FRONTEND=noninteractive
+# FROM ubuntu:20.04
+# ARG DEBIAN_FRONTEND=noninteractive
+FROM selenium/standalone-chrome
 
+USER root
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3 get-pip.py
+RUN python3 -m pip install selenium
 
 WORKDIR /python-docker
 
